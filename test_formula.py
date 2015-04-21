@@ -64,7 +64,7 @@ def calc_azimuth_right_left(llat1,llong1,llat2,llong2):
             'lonr' : lonr,
             'latr' : latr,
             'lonl' : lonl,
-            'latr' : latr,
+            'latl' : latl,
             'distance' : dist}
 #    print 'left' + str(latl)+' '+str(lonl)
 #    print 'right' + str(latr)+' '+str(lonr)
