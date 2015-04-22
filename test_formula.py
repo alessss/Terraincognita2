@@ -56,6 +56,7 @@ def calc_azimuth_right_left(llat1,llong1,llat2,llong2):
 
     latl = llat1 + 500 * math.cos(azimutl * math.pi / 180) / (6371000 * math.pi / 180)
     lonl = llong1 + 500 * math.sin(azimutl * math.pi / 180) / math.cos(llat1 * math.pi / 180) / (6371000 * math.pi / 180)
+    square = dist*500
     point ={'cur_lat': llat1,
             'cur_lon' : llong1,
             'futlat' : llat2,
@@ -65,13 +66,14 @@ def calc_azimuth_right_left(llat1,llong1,llat2,llong2):
             'latr' : latr,
             'lonl' : lonl,
             'latl' : latl,
-            'distance' : dist}
+            'distance' : dist,
+            'square' : square}
 #    print 'left' + str(latl)+' '+str(lonl)
 #    print 'right' + str(latr)+' '+str(lonr)
     return(point)
 
 #print calc_azimuth_right_left(53.917534443,27.7704913427,53.910025557,27.7620886573)
-def full_route_calc():
+def full_route_calc(): #returns full route json with right and left tracks
     full_route = []
     point = {}
     i = 0
@@ -89,6 +91,28 @@ def full_route_calc():
             full_route.append(full_route_dict)
             #print full_route
             i = i+1
-    print full_route
+    return full_route
 
-print full_route_calc()
+def cut_tracks_separatly(point): #returns separate tracks for left and right
+    for i in point:
+        current_track = []
+        a = i.get('cur_lat')
+        b = i.get('cur_lon')
+        current_track.append(i.get('lat:', a))
+        route.append(i.get('lon:', b))
+
+    for i in point:
+        right_track = []
+        a = i.get('latr')
+        b = i.get('lonr')
+        right_track.append(i.get('latr:', a))
+        right_track.append(i.get('lonr:', b))
+
+    for i in point:
+        left_track = []
+        a = i.get('latl')
+        b = i.get('lonl')
+        left_track.append(i.get('latl:', a))
+        left_track.append(i.get('lonl:', b))
+
+    return(current_track, left_track,right_track)
