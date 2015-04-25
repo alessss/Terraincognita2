@@ -74,7 +74,7 @@ def calc_square(route):
         y=tiles.get('y')
         total_square = total_square + calc_corners(x,y,15)
 #        print 'http://a.tile.openstreetmap.org/15/'+str(x)+'/'+str(y)+'.png'
-    return(str(total_square/(1000*1000)) + 'km2 visited')
+    return(total_square/(1000*1000))
 
 #print str(total_square/(1000*1000)) + 'km2 visited'
 #finish = time.time()
