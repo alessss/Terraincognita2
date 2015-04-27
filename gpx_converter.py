@@ -39,4 +39,7 @@ def get_gpx_files(folder):
 overall_square = 0
 for i in get_gpx_files('D:\\Terra incognita\\'):
     overall_square = overall_square + tiles_calculations.calc_square(file_worker('D:\\Terra incognita\\'+i))
+    print 'file' + ' ' + i + ' ' + 'processed'
     print overall_square
+    print "% of land visited"
+    print (overall_square/510072000)*10000
