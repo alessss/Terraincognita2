@@ -1,39 +1,21 @@
 import math, time
+class Point:
+     x = 0
+     y = 0
+     def deg2num(lat_deg, lon_deg, zoom): #calculates tile number by coordinate
+         lat_rad = math.radians(lat_deg)
+         n = 2.0 ** zoom
+         xtile = int((lon_deg + 180.0) / 360.0 * n)
+         ytile = int((1.0 - math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi) / 2.0 * n)
+         return (xtile, ytile)
 
-start = time.time()
+     def num2deg(xtile, ytile, zoom): #calculates NW corner tile coordinates
+         n = 2.0 ** zoom
+         lon_deg = xtile / n * 360.0 - 180.0
+         lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * ytile / n)))
+         lat_deg = math.degrees(lat_rad)
+         return (lat_deg, lon_deg)
 
-def deg2num(lat_deg, lon_deg, zoom): #calculates tile number by coordinate
-  lat_rad = math.radians(lat_deg)
-  n = 2.0 ** zoom
-  xtile = int((lon_deg + 180.0) / 360.0 * n)
-  ytile = int((1.0 - math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi) / 2.0 * n)
-  return (xtile, ytile)
-
-def num2deg(xtile, ytile, zoom): #calculates NW corner tile coordinates
-  n = 2.0 ** zoom
-  lon_deg = xtile / n * 360.0 - 180.0
-  lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * ytile / n)))
-  lat_deg = math.degrees(lat_rad)
-  return (lat_deg, lon_deg)
-
-def distance_calculator(llat1,llong1,llat2,llong2):
-    rad = 6372795
-    lat1 = llat1*math.pi/180.
-    lat2 = llat2*math.pi/180.
-    long1 = llong1*math.pi/180.
-    long2 = llong2*math.pi/180.
-    cl1 = math.cos(lat1)
-    cl2 = math.cos(lat2)
-    sl1 = math.sin(lat1)
-    sl2 = math.sin(lat2)
-    delta = long2 - long1
-    cdelta = math.cos(delta)
-    sdelta = math.sin(delta)
-    y = math.sqrt(math.pow(cl2*sdelta,2)+math.pow(cl1*sl2-sl1*cl2*cdelta,2))
-    x = sl1*sl2+cl1*cl2*cdelta
-    ad = math.atan2(y,x)
-    dist = ad*rad
-    return dist
 
 def calc_corners(x,y,zoom): #calculates corners of tile and tile square
     NWlat, NWlon = num2deg(x, y, zoom)
@@ -62,31 +44,34 @@ def calc_square(route):
 
             f.write(str(tile_index_temp) + '\n')
         f.close()
-#        if check_if_tile_visited(tile_index_temp) == True:
-#            f = open('D:\\Terra incognita\\visited_tiles.txt', 'w')
-#            f.write(str(tile_index_temp))
-
     total_square = 0
     for tiles in tile_index:
         x=tiles.get('x')
         y=tiles.get('y')
         total_square = total_square + calc_corners(x,y,15)
 #        print 'http://a.tile.openstreetmap.org/15/'+str(x)+'/'+str(y)+'.png'
-
     return(total_square/(1000*1000))
 
-#print str(total_square/(1000*1000)) + 'km2 visited'
-#finish = time.time()
-#print str(finish - start) + 'sec'
-
-def writing_tiles_visited(tile_index_temp):
-    f = open('D:\\Terra incognita\\visited_tiles.txt', 'r+')
-    for i in f:
-
-        print str(i)+ 'i'
-        for tile in tile_index_temp:
-#            f = open('D:\\Terra incognita\\visited_tiles.txt', 'r+')
-            f.write(str(tile))
-            print str(tile) +'tile'
-            if str(tile)!= str(i):
-                jhgfrr = 0
+class Line:
+     x1 = 0
+     y1 = 0
+     x2 = 0
+     y2 = 0
+     def distance_calculator(llat1,llong1,llat2,llong2):
+     rad = 6372795
+     lat1 = llat1*math.pi/180.
+     lat2 = llat2*math.pi/180.
+     long1 = llong1*math.pi/180.
+     long2 = llong2*math.pi/180.
+     cl1 = math.cos(lat1)
+     cl2 = math.cos(lat2)
+     sl1 = math.sin(lat1)
+     sl2 = math.sin(lat2)
+     delta = long2 - long1
+     cdelta = math.cos(delta)
+     sdelta = math.sin(delta)
+     y = math.sqrt(math.pow(cl2*sdelta,2)+math.pow(cl1*sl2-sl1*cl2*cdelta,2))
+     x = sl1*sl2+cl1*cl2*cdelta
+     ad = math.atan2(y,x)
+     dist = ad*rad
+     return dist
